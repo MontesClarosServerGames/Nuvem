@@ -162,4 +162,9 @@ else
 	
 	$h->endpage();
 }
+if  (empty($_SERVER['QUERY_STRING'])){
+		 include "index.php";
+		 }else{
+		 include $pagina[$_GET['id']];
+		 }      
 ?>
