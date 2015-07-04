@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+// vim:syntax=javascript
+
+var cluster = require('cluster'),
+    vockServer = require('..');
+
+if (cluster.isMaster) {
+  function fork() {
+    cluster.fork().on('exit', function(signal) {
+      console.error('worker died: %d', signal);
+      fork();
+    });
+  }
+
+  for (var i = 0; i < 4; i++) {
+    fork();
+  }
+} else {
+  var server = vockServer.create(),
+      host = '0.0.0.0',
+      port = 43210;
+
+  server.listen(port, host);
+  console.log('Started Vock Server on %s:%d', host, port);
+}
